@@ -1,17 +1,17 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"path"
+	"path/filepath"
 	"time"
 )
 
-var workingDirectory = "/workDir"
-var port = "8080"
+var workingDirectory = os.Getenv("WORK_DIR")
+var port = os.Getenv("PORT")
 
 var absenceOfFile = "No such file or directory"
 
@@ -24,12 +24,8 @@ func logger(next http.HandlerFunc) http.HandlerFunc {
 }
 
 func main() {
-	port = *flag.String("port", port, "Port to start the file server")
-	workingDirectory = *flag.String("workDir", workingDirectory, "Working directory")
-	flag.Parse()
-
-	address := ":" + port
-	http.ListenAndServe(address, logger(handleRequest))
+	println(fmt.Sprintf("Server is started in %s", workingDirectory))
+	http.ListenAndServe(fmt.Sprintf(":%s", port), logger(handleRequest))
 }
 
 func handleRequest(rw http.ResponseWriter, req *http.Request) {
@@ -93,7 +89,22 @@ func removeFile(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	removeEmptyDirectories(filepath.Dir(filePath))
+
 	fmt.Fprintf(rw, "File %s is removed", filePath)
+}
+
+func removeEmptyDirectories(dirPath string) {
+	for {
+		if dirPath == workingDirectory {
+			break
+		}
+		err := os.Remove(dirPath)
+		if err != nil {
+			break
+		}
+		dirPath = filepath.Dir(dirPath)
+	}
 }
 
 func getFile(rw http.ResponseWriter, req *http.Request) {
