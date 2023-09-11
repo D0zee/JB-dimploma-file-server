@@ -34,13 +34,11 @@ func main() {
 	flag.Parse()
 
 	address := ":" + port
-	http.HandleFunc("/", logger(handleRequest))
-	http.ListenAndServe(address, nil)
+	http.ListenAndServe(address, logger(handleRequest))
 }
 
 func handleRequest(rw http.ResponseWriter, req *http.Request) {
-	method := req.Method
-	switch method {
+	switch req.Method {
 	case http.MethodPost:
 		saveFile(rw, req)
 	case http.MethodGet:
