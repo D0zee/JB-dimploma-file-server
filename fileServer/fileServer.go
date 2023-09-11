@@ -10,11 +10,6 @@ import (
 	"time"
 )
 
-// Task description:
-//POST /<file-system-path> # save a file on the file system according to the specified path, e.g. /directory1/directory2/filename.txt
-//GET /<file-system-path> # serve a file
-//DELETE /<file-system-path> # delete a file on the file system
-
 var workingDirectory = "/workDir"
 var port = "8080"
 
