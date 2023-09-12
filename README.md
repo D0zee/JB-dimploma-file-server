@@ -18,12 +18,14 @@ You can change these parameters if you want. Sources of application are placed i
 
 ## How to use:
 
-- To get a file from server: `curl --request GET http://localhost:8080/<path_to_file>`
+- To get a file from server: `curl --request GET http://localhost:8080/[path_to_file] > [name-of-file]`. Information
+  will be saved on `[name-of-file]`, but if you want to get binary presentation of file, you should
+  remove `> [name-of-file]`.
 - To load a file on
-  server: `curl --request POST --data-binary "@<path_to_file_on_your_pc>" http://localhost:8080/<path_to_file>`
-- To delete a file from server: `curl --request DELETE http://localhost:8080/<path_to_file>`
+  server: `curl --request POST --data-binary "@[path_to_file_on_your_pc]" http://localhost:8080/[path_to_file]`
+- To delete a file from server: `curl --request DELETE http://localhost:8080/[path_to_file]`
 
-`path_to_file_on_your_pc` might be an absolute or relative path. Don't forget about `@` sign before a path to file on
+`[path_to_file_on_your_pc]` might be an absolute or relative path. Don't forget about `@` sign before a path to file on
 your pc.
 
 You can test this application by running the ``testScript.sh``. **Important note: before launching you must launch the
