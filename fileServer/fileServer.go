@@ -48,7 +48,7 @@ func saveFile(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 	dir := path.Dir(filePath)
-	println(filePath, dir)
+
 	if _, err := os.Stat(filePath); err == nil {
 		http.Error(rw, "File already exists", http.StatusBadRequest)
 		return
@@ -57,7 +57,6 @@ func saveFile(rw http.ResponseWriter, req *http.Request) {
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		err := os.MkdirAll(dir, os.ModePerm)
 		if err != nil {
-			println("aboab stat")
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -65,7 +64,6 @@ func saveFile(rw http.ResponseWriter, req *http.Request) {
 
 	file, err := os.Create(filePath)
 	if err != nil {
-		println("create")
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -73,7 +71,6 @@ func saveFile(rw http.ResponseWriter, req *http.Request) {
 
 	_, err = io.Copy(file, req.Body)
 	if err != nil {
-		println("copy")
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
