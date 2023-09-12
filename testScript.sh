@@ -2,9 +2,15 @@
 
 BASE_URL="http://localhost:8080/"
 
+
+clean_and_terminate(){
+  rm -rf testOutput
+  exit 1
+}
+
 mkdir testOutput
 
-for file in "../testData"/*; do
+for file in "./testData"/*; do
   if [ -f "$file" ]; then
 
     file_name=$(basename "$file")
@@ -20,7 +26,7 @@ for file in "../testData"/*; do
       echo "Test [$file_name] is PASSED"
     else
       echo "Test [$file_name] is FAILED"
-      exit 1
+      clean_and_terminate
     fi
 
     curl --request DELETE -s "$BASE_URL$url_path" >/dev/null
@@ -29,9 +35,8 @@ for file in "../testData"/*; do
     status_code=$(curl --request GET -o /dev/null -s -I -w "%{http_code}" "$BASE_URL$url_path")
     if [[ $status_code != "404" ]]; then
       echo "ERROR! status_code isn't 404"
-      exit 1
+      clean_and_terminate
     fi
   fi
 done
-
 rm -rf testOutput
